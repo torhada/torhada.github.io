@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Works — HARUTO</title>
+<meta name="description" content="HARUTO の制作実績一覧。自動化アプリ / Chrome拡張 / 生成AI / LP。" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    ::selection { background-color: #000000; color: #ffffff; }
+</style>
+<script src="assets/config.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-background border-b border-surface-container">
+<nav class="flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
+<a href="index.html" class="font-label-md text-label-md font-bold uppercase tracking-widest text-primary">HARUTO</a>
+<div class="flex gap-8">
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="index.html">Home</a>
+<a class="font-label-md text-label-md text-primary border-b border-primary pb-1" href="works.html">Works</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="about.html">About</a>
+</div>
+</nav>
+</header>
+
+<main class="pt-32 pb-stack-xl max-w-[1440px] mx-auto">
+
+<!-- Header -->
+<section class="px-margin-mobile md:px-margin-desktop mb-stack-md md:mb-stack-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surface-container pb-stack-sm">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase tracking-tight">Works</h1>
+<span class="font-label-md text-label-md text-outline mb-2">App · Extension · GenAI · LP</span>
+</div>
+</section>
+
+<!-- Note: content is being added -->
+<section class="px-margin-mobile md:px-margin-desktop mb-stack-md">
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[640px]">自動化アプリ・Chrome 拡張機能・生成 AI 活用・LP を順次追加していきます。以下は構成のプレースホルダーです。</p>
+</section>
+
+<!-- Filter chips (visual only for now) -->
+<section class="px-margin-mobile md:px-margin-desktop mb-stack-md">
+<div class="flex flex-wrap gap-3">
+<button class="px-4 py-2 border border-primary bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest">All</button>
+<button class="px-4 py-2 border border-outline-variant text-outline hover:border-primary hover:text-primary font-label-sm text-label-sm uppercase tracking-widest transition-colors">App</button>
+<button class="px-4 py-2 border border-outline-variant text-outline hover:border-primary hover:text-primary font-label-sm text-label-sm uppercase tracking-widest transition-colors">Extension</button>
+<button class="px-4 py-2 border border-outline-variant text-outline hover:border-primary hover:text-primary font-label-sm text-label-sm uppercase tracking-widest transition-colors">GenAI</button>
+<button class="px-4 py-2 border border-outline-variant text-outline hover:border-primary hover:text-primary font-label-sm text-label-sm uppercase tracking-widest transition-colors">LP</button>
+</div>
+</section>
+
+<!-- Project grid -->
+<section class="px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-stack-md">
+
+<a href="#" class="group block" data-reveal>
+<div class="aspect-[4/3] bg-surface-container overflow-hidden mb-stack-sm">
+<img data-grayscale alt="Automation app" src="https://picsum.photos/seed/haruto-app/800/600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">自動化アプリ</h3>
+<span class="font-label-sm text-label-sm text-outline">Coming</span>
+</div>
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest mt-1">Application</p>
+</a>
+
+<a href="#" class="group block" data-reveal>
+<div class="aspect-[4/3] bg-surface-container overflow-hidden mb-stack-sm">
+<img data-grayscale alt="Chrome extension" src="https://picsum.photos/seed/haruto-ext/800/600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">Chrome 拡張機能</h3>
+<span class="font-label-sm text-label-sm text-outline">Coming</span>
+</div>
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest mt-1">Browser Extension</p>
+</a>
+
+<a href="#" class="group block" data-reveal>
+<div class="aspect-[4/3] bg-surface-container overflow-hidden mb-stack-sm">
+<img data-grayscale alt="Generative AI" src="https://picsum.photos/seed/haruto-ai/800/600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">生成 AI 活用</h3>
+<span class="font-label-sm text-label-sm text-outline">Coming</span>
+</div>
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest mt-1">Generative AI</p>
+</a>
+
+<a href="#" class="group block" data-reveal>
+<div class="aspect-[4/3] bg-surface-container overflow-hidden mb-stack-sm">
+<img data-grayscale alt="Landing page" src="https://picsum.photos/seed/haruto-lp/800/600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">ランディングページ</h3>
+<span class="font-label-sm text-label-sm text-outline">Coming</span>
+</div>
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest mt-1">Landing Page</p>
+</a>
+
+<a href="#" class="group block" data-reveal>
+<div class="aspect-[4/3] bg-surface-container overflow-hidden mb-stack-sm flex items-center justify-center border border-dashed border-outline-variant">
+<span class="material-symbols-outlined text-5xl text-outline-variant">add</span>
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md text-outline">More to come</h3>
+<span class="font-label-sm text-label-sm text-outline">—</span>
+</div>
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest mt-1">Work in progress</p>
+</a>
+
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-background border-t border-surface-container">
+<div class="flex flex-col md:flex-row justify-between items-center py-stack-md px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto gap-4">
+<div class="font-label-sm text-label-sm font-semibold text-primary">© 2026 HARUTO. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="#">GitHub</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="#">X</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="#">LinkedIn</a>
+</div>
+</div>
+</footer>
+
+<script src="assets/main.js"></script>
+</body>
+</html>

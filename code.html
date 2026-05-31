@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Custom selection for brand feel */
+        ::selection {
+            background-color: #000000;
+            color: #ffffff;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2e3132",
+                        "surface-variant": "#e1e3e4",
+                        "secondary-fixed-dim": "#b9c3ff",
+                        "tertiary-fixed": "#e2e2e2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1b1b1b",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9fa",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "secondary-container": "#4365fb",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#4c4546",
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-container": "#1b1b1b",
+                        "surface": "#f8f9fa",
+                        "on-secondary-container": "#fffbff",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#474747",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary-fixed": "#e2e2e2",
+                        "secondary-fixed": "#dee1ff",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-primary-container": "#848484",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#848484",
+                        "surface-tint": "#5e5e5e",
+                        "on-secondary-fixed-variant": "#0033c2",
+                        "on-error": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "primary": "#000000",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary": "#214ae2",
+                        "outline-variant": "#cfc4c5",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#7e7576",
+                        "on-background": "#191c1d",
+                        "on-surface": "#191c1d",
+                        "tertiary": "#000000",
+                        "inverse-on-surface": "#f0f1f2",
+                        "inverse-primary": "#c6c6c6",
+                        "on-secondary-fixed": "#001257"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "stack-lg": "80px",
+                        "stack-xl": "128px",
+                        "margin-desktop": "64px",
+                        "stack-sm": "16px",
+                        "stack-md": "40px",
+                        "margin-mobile": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Geist"],
+                        "headline-lg-mobile": ["Geist"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-lg": ["Geist"],
+                        "display": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                        "display": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-background border-b border-surface-container">
+<nav class="flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
+<div class="font-label-md text-label-md font-bold uppercase tracking-widest text-primary">
+                STUDIO_K
+            </div>
+<div class="flex gap-8">
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="#">Home</a>
+<a class="font-label-md text-label-md text-primary border-b border-primary pb-1" href="#">Works</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="#">About</a>
+</div>
+</nav>
+</header>
+<main class="pt-32 pb-stack-xl max-w-[1440px] mx-auto">
+<!-- Project Hero Header -->
+<section class="px-margin-mobile md:px-margin-desktop mb-stack-md md:mb-stack-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surface-container pb-stack-sm">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase tracking-tight">VISION_CORE</h1>
+<span class="font-label-md text-label-md text-outline mb-2">2024</span>
+</div>
+</section>
+<!-- Main Media - Full Bleed Style -->
+<section class="mb-stack-lg overflow-hidden">
+<img alt="Architecture detail" class="w-full h-[614px] md:h-[819px] object-cover filter grayscale hover:grayscale-0 transition-all duration-700 cursor-crosshair" data-alt="A cinematic, high-resolution photograph of a futuristic brutalist building at dawn. The architecture features sharp edges, clean concrete lines, and large glass panes reflecting a soft, overcast morning sky. The lighting is low-contrast and soft, emphasizing the minimalist and precise construction. The composition is wide and expansive, creating a gallery-like atmosphere in a monochromatic palette of greys and whites with subtle blue undertones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSI6Mr8eWauSZ0Dd9_B_6zkwWDGZRvBg_CFZlexv349yT314VgPDNfKVAR7gBHe9Adq0Q00d6v0G8cXYwdUKyMoJIFUrojn6UxTwtEmdPV_dcIzaV8rIRf_4j9hD6bU4GMaaUQ3UZO-UQd990BR6rv-cfIA6tK59ZEeUfoM_mPOxzGECSnUhY-ZYclWSUQPUFajOLv01Pi7X1cJzJVHHxAruiXaCHR-D8dnHkREH6na5CO9B5--jUPoJvI0BanPCqwgFVngMRZOXJJ"/>
+</section>
+<!-- Split Content: Details & Secondary Media -->
+<section class="px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter md:gap-margin-desktop items-start">
+<!-- Details Sidebar -->
+<aside class="md:col-span-4 sticky top-24 space-y-stack-md">
+<div class="space-y-4">
+<h3 class="font-label-sm text-label-sm text-outline uppercase tracking-widest border-b border-surface-container pb-2">Technical Core</h3>
+<ul class="space-y-2"><li class="font-body-md text-body-md flex items-center gap-3"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span>Computer Vision</li><li class="font-body-md text-body-md flex items-center gap-3"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span>PyTorch</li><li class="font-body-md text-body-md flex items-center gap-3"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span>React</li></ul>
+</div>
+<div class="space-y-4">
+<h3 class="font-label-sm text-label-sm text-outline uppercase tracking-widest border-b border-surface-container pb-2">Role</h3>
+<ul class="space-y-2">
+<li class="font-body-md text-body-md flex items-center gap-3">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                            Lead Technical Architect
+                        </li>
+<li class="font-body-md text-body-md flex items-center gap-3">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                            Visual System Design
+                        </li>
+</ul>
+</div>
+<div class="pt-8">
+<button class="w-full md:w-auto px-10 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors duration-300 active:scale-95">
+                        Launch Case Study
+                    </button>
+</div>
+</aside>
+<!-- Media Gallery -->
+<div class="md:col-span-8 space-y-gutter">
+<div class="aspect-[4/3] bg-surface-container overflow-hidden">
+<img alt="Geometric shadows" class="w-full h-full object-cover grayscale" data-alt="A minimalist architectural detail showing sharp, geometric shadows cast on a light grey concrete surface. The lighting is harsh and direct, creating high contrast between the deep blacks of the shadows and the bright, matte texture of the building. The image captures a clean, professional aesthetic with an emphasis on mathematical precision and structural clarity, fitting a modern corporate design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9fFC4O7ivK4GdF0K5XTKP28bxz33WJ3QbTIV2brJLHN59tRDrQoHcP5KvosUJT-Q7ED5N-rSCbdu1q4RKh544dCMPs-jR8MD_tTXjXnrZAQaFgzm4av8IvIlt0aGmHUvOK1Tz9_6kOaf8Kk-uw2bdy1LiYE4mD3_8CO5UUVIaAAbUZ8gno1C_IxnfeN_MVxEOvvsjulE8zTioeR7UvPOyUW1Ut6ijIG9XChCo9WhTLqbK0PtMcUJEmr6L2U18LgJ0zqyQzSDANqnF"/>
+</div>
+<div class="grid grid-cols-2 gap-gutter">
+<div class="aspect-square bg-surface-container overflow-hidden">
+<img alt="Building detail" class="w-full h-full object-cover grayscale" data-alt="A close-up vertical shot of a modern glass skyscraper reflecting a clear, bright sky. The facade consists of repetitive rectangular modules, creating a rhythmic, grid-like pattern. The lighting is crystalline and sharp, emphasizing the transparency and reflective properties of the materials. The mood is authoritative and cold, representing high-end creative professional environments." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfEYagE-aXG_chw3fz7Fq7PKWZuBP-CCok7zKXp80k6-L359rlXQ8kxTGx6J3RIAYnkLR0VztZIvv-09h6BeDCpXxguD4YLQgOxmZ-ClwQBqELTRA_ydUuYU8NRfsE7fYZ4ald9vwgX_v3ob6wllK5j-owK1KB4qaEqTQZF0nyYglUOtviRQ9PFucofjlxRVo4S5AP2IlMh2_MYu8okLHZJA5cNvfJOiJkWVu4E8XebKbgZlYywsaiYRPf-w4KMaHkceLwo5H28c-b"/>
+</div>
+<div class="aspect-square bg-surface-container overflow-hidden">
+<img alt="Interior detail" class="w-full h-full object-cover grayscale" data-alt="An interior shot of a vast, minimalist concrete atrium with a single shaft of light cutting through the darkness. The lighting creates a dramatic chiaroscuro effect, highlighting the raw texture of the walls. There is no furniture or decoration, only the pure volume of space and the interplay of light and shadow, evoking a sense of quiet confidence and architectural authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRtIJ7ia2nXzxo2RQ2_7WJWzU-TY44mN5qRdmLDwWmVzc73uZN9CDAwdfd2C5zTejKAXaVSe4WWhkHxCJQRhPWhb96bWyVKVBdADA5BGWgAWLafbjltLIVhFnRBS1DDMk7ee5JhY0Yo-4nZUtZFQxwqKNeY6AN6AHQbbXGHeY-8ilJ-Kb-hOIep9xH1I2kxXGJxyndijW9dR_moB62Vfn3c8852otROq0sZyWzs1Yehk6tE4Qkg5tPYkFjGaZdsiP4OBCkNZFH9gzl"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Next Project Navigation -->
+<section class="mt-stack-xl px-margin-mobile md:px-margin-desktop">
+<a class="group block border-t border-surface-container py-stack-md flex items-center justify-between transition-all duration-500 hover:bg-surface-container-low px-4" href="#">
+<div class="space-y-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Next Project</span>
+<h2 class="font-headline-md text-headline-md uppercase group-hover:translate-x-4 transition-transform duration-500">Kinetic Monolith</h2>
+</div>
+<span class="material-symbols-outlined text-4xl group-hover:scale-150 transition-transform duration-500" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-background border-t border-surface-container">
+<div class="flex flex-col md:flex-row justify-between items-center py-stack-md px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto gap-4">
+<div class="font-label-sm text-label-sm font-semibold text-primary">
+                © 2024 STUDIO_K. ALL RIGHTS RESERVED.
+            </div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="#">LinkedIn</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="#">GitHub</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="#">Instagram</a>
+</div>
+</div>
+</footer>
+<script>
+        // Subtle interaction for image hover
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('mouseenter', () => {
+                img.style.filter = 'grayscale(0%)';
+            });
+            img.addEventListener('mouseleave', () => {
+                img.style.filter = 'grayscale(100%)';
+            });
+        });
+
+        // Simple scroll indicator or reveal effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('header');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-sm');
+            } else {
+                nav.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+</body></html>

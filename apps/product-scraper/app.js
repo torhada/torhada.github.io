@@ -114,6 +114,15 @@ clearBtn.addEventListener("click", () => {
   setStatus("");
 });
 
+// Example buttons: click to fill the input, ready to run.
+document.querySelectorAll("[data-example]").forEach((b) => {
+  b.addEventListener("click", () => {
+    urls.value = b.dataset.example;
+    setStatus("");
+    urls.focus();
+  });
+});
+
 function csvCell(v) {
   const s = v == null ? "" : String(v);
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;

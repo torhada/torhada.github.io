@@ -41,16 +41,27 @@
 <p class="font-body-lg text-body-lg text-on-surface-variant max-w-[760px] mt-stack-md">
 商品ページのURLを貼り付けると、商品名と価格を抽出して一覧表にし、CSVでダウンロードできます。複数のURLをまとめて比較表にするのに便利です。
 </p>
-<p class="font-label-sm text-label-sm text-outline mt-stack-sm flex items-start gap-2">
-<span class="material-symbols-outlined text-base">info</span>
-<span>取得は Cloudflare Worker（サーバー側）が行います。<strong>個別商品ページ</strong>は構造化データ（schema.org / OGP）から、<strong>Shopify店舗の一覧（/collections/…）ページ</strong>は公式の products.json から商品名・価格を抽出します。JavaScriptで描画する独自サイトやbotを弾くサイト（Amazon等）は取得できないことがあります。対象サイトの利用規約・robots.txt に配慮してご利用ください。</span>
-</p>
+<div class="mt-stack-sm border border-surface-container rounded p-4 space-y-2">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest">対応状況</p>
+<ul class="font-body-md text-body-md space-y-1">
+<li class="flex gap-2"><span class="text-secondary font-bold">○</span><span>個別商品ページ（schema.org / OGP を持つサイト）</span></li>
+<li class="flex gap-2"><span class="text-secondary font-bold">○</span><span>Shopify店舗の一覧ページ（URLに <span class="font-label-sm">/collections/</span> を含む）</span></li>
+<li class="flex gap-2"><span class="text-outline font-bold">×</span><span>JSで描画する独自サイト・botを弾くサイト（Amazon 等）は取得できないことがあります</span></li>
+</ul>
+<p class="font-label-sm text-label-sm text-outline">取得はサーバー側（Cloudflare Worker）で行います。対象サイトの利用規約・robots.txt に配慮してご利用ください。</p>
+</div>
 </section>
 
 <!-- Input -->
 <section class="space-y-stack-sm">
 <label for="urls" class="font-label-sm text-label-sm text-outline uppercase tracking-widest">商品ページURL（1行に1つ）</label>
 <textarea id="urls" rows="5" class="w-full border border-outline-variant rounded p-4 font-body-md text-body-md focus:border-primary focus:ring-0" placeholder="一覧（Shopify店舗）の例:&#10;https://www.allbirds.com/collections/mens&#10;&#10;個別商品ページの例:&#10;https://www.gymshark.com/products/gymshark-arrival-5-shorts-black-aw21"></textarea>
+
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">一覧の例（クリックで入力）:</span>
+<button type="button" data-example="https://cohina.net/collections/all" class="px-3 py-1.5 border border-outline-variant rounded font-label-sm text-label-sm hover:border-primary hover:text-primary transition-colors">cohina.net（日本）</button>
+<button type="button" data-example="https://www.allbirds.com/collections/mens" class="px-3 py-1.5 border border-outline-variant rounded font-label-sm text-label-sm hover:border-primary hover:text-primary transition-colors">allbirds（海外）</button>
+</div>
 
 <div class="flex flex-col sm:flex-row gap-3">
 <button id="runBtn" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors duration-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">
@@ -129,6 +140,6 @@
 </div>
 </footer>
 
-<script type="module" src="app.js?v=2"></script>
+<script type="module" src="app.js?v=3"></script>
 </body>
 </html>

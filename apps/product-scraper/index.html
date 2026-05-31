@@ -43,14 +43,14 @@
 </p>
 <p class="font-label-sm text-label-sm text-outline mt-stack-sm flex items-start gap-2">
 <span class="material-symbols-outlined text-base">info</span>
-<span>取得は Cloudflare Worker（サーバー側）が行います。ページ内の構造化データ（schema.org / OGP）から抽出するため、JavaScriptで描画するサイトやbotを弾くサイトは取得できない場合があります。対象サイトの利用規約・robots.txt に配慮してご利用ください。</span>
+<span>取得は Cloudflare Worker（サーバー側）が行います。<strong>個別商品ページ</strong>は構造化データ（schema.org / OGP）から、<strong>Shopify店舗の一覧（/collections/…）ページ</strong>は公式の products.json から商品名・価格を抽出します。JavaScriptで描画する独自サイトやbotを弾くサイト（Amazon等）は取得できないことがあります。対象サイトの利用規約・robots.txt に配慮してご利用ください。</span>
 </p>
 </section>
 
 <!-- Input -->
 <section class="space-y-stack-sm">
 <label for="urls" class="font-label-sm text-label-sm text-outline uppercase tracking-widest">商品ページURL（1行に1つ）</label>
-<textarea id="urls" rows="5" class="w-full border border-outline-variant rounded p-4 font-body-md text-body-md focus:border-primary focus:ring-0" placeholder="https://example.com/products/aaa&#10;https://example.com/products/bbb"></textarea>
+<textarea id="urls" rows="5" class="w-full border border-outline-variant rounded p-4 font-body-md text-body-md focus:border-primary focus:ring-0" placeholder="一覧（Shopify店舗）の例:&#10;https://www.allbirds.com/collections/mens&#10;&#10;個別商品ページの例:&#10;https://www.gymshark.com/products/gymshark-arrival-5-shorts-black-aw21"></textarea>
 
 <div class="flex flex-col sm:flex-row gap-3">
 <button id="runBtn" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors duration-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">

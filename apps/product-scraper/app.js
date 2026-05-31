@@ -4,7 +4,7 @@
 // table you can export as CSV.
 
 // Set this to your deployed Worker URL (see product-scraper-worker/README.md).
-const WORKER_URL = "https://product-scraper.YOUR-SUBDOMAIN.workers.dev";
+const WORKER_URL = "https://product-scraper.torhada.workers.dev";
 
 // Allow overriding the endpoint without redeploying (stored in the browser).
 function endpoint() {

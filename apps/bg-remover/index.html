@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Background Remover — 背景透過ツール / HARUTO</title>
+<meta name="description" content="画像をドロップするだけで背景を自動で透過PNGに。すべてブラウザ内で処理され、画像は外部に送信されません。" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    ::selection { background-color: #000000; color: #ffffff; }
+    /* Transparency checkerboard for the result preview */
+    .checker {
+        background-image:
+            linear-gradient(45deg, #e1e3e4 25%, transparent 25%),
+            linear-gradient(-45deg, #e1e3e4 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #e1e3e4 75%),
+            linear-gradient(-45deg, transparent 75%, #e1e3e4 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+</style>
+<script src="../../assets/config.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-background border-b border-surface-container">
+<nav class="flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
+<a href="../../index.html" class="font-label-md text-label-md font-bold uppercase tracking-widest text-primary">HARUTO</a>
+<div class="flex gap-8">
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../index.html">Home</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../works.html">Works</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../about.html">About</a>
+</div>
+</nav>
+</header>
+
+<main class="pt-32 pb-stack-xl max-w-[1100px] mx-auto px-margin-mobile md:px-margin-desktop">
+
+<!-- Header -->
+<section class="mb-stack-md">
+<a href="../../works.html" class="font-label-sm text-label-sm text-outline hover:text-primary uppercase tracking-widest inline-flex items-center gap-1 mb-stack-sm">← Works</a>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surface-container pb-stack-sm">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase tracking-tight">Background Remover</h1>
+<span class="font-label-md text-label-md text-outline mb-2">Web App · 背景透過</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[760px] mt-stack-md">
+画像をドロップするだけで、背景を自動で切り抜いて透過PNGにします。フリマの商品写真、プロフィール画像、資料用の切り抜きなどに。
+</p>
+<p class="font-label-sm text-label-sm text-outline mt-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-base">lock</span>
+画像はサーバーに送信されず、すべてあなたのブラウザ内で処理されます。
+</p>
+</section>
+
+<!-- Drop zone -->
+<section id="dropZone" class="border border-dashed border-outline-variant text-outline hover:border-primary hover:text-primary transition-colors cursor-pointer rounded-lg py-stack-xl flex flex-col items-center justify-center gap-3 text-center">
+<span class="material-symbols-outlined text-5xl">add_photo_alternate</span>
+<p class="font-body-lg text-body-lg">画像をドロップ、またはクリックして選択</p>
+<p class="font-label-sm text-label-sm uppercase tracking-widest">PNG / JPG / WEBP</p>
+<input id="fileInput" type="file" accept="image/*" class="hidden" />
+</section>
+
+<!-- Stage (before / after) -->
+<section id="stage" class="hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Before -->
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest border-b border-surface-container pb-2">Before</p>
+<div class="aspect-square bg-surface-container overflow-hidden flex items-center justify-center">
+<img id="beforeImg" alt="入力画像" class="max-w-full max-h-full object-contain" />
+</div>
+</div>
+<!-- After -->
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest border-b border-surface-container pb-2">After</p>
+<div id="resultWrap" class="aspect-square overflow-hidden flex items-center justify-center checker">
+<canvas id="resultCanvas" class="max-w-full max-h-full object-contain"></canvas>
+</div>
+</div>
+</div>
+
+<!-- Progress + status -->
+<div class="mt-stack-sm">
+<div id="barWrap" class="h-1 bg-surface-container opacity-0 transition-opacity duration-300">
+<div id="bar" class="h-full bg-secondary transition-all duration-200" style="width:0%"></div>
+</div>
+<p id="status" class="font-body-md text-body-md text-on-surface-variant mt-stack-sm min-h-[1.5em]"></p>
+</div>
+
+<!-- Background options -->
+<div class="mt-stack-sm flex flex-wrap items-center gap-4">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">背景</span>
+<div class="flex gap-3">
+<button data-bg="transparent" class="w-9 h-9 border border-outline-variant rounded checker ring-2 ring-primary" title="透過"></button>
+<button data-bg="#ffffff" class="w-9 h-9 border border-outline-variant rounded" style="background:#ffffff" title="白"></button>
+<button data-bg="#000000" class="w-9 h-9 border border-outline-variant rounded" style="background:#000000" title="黒"></button>
+<button data-bg="#214ae2" class="w-9 h-9 border border-outline-variant rounded" style="background:#214ae2" title="青"></button>
+</div>
+</div>
+
+<!-- Actions -->
+<div class="mt-stack-md flex flex-col sm:flex-row gap-3">
+<button id="downloadBtn" disabled class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors duration-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">
+<span class="material-symbols-outlined text-lg">download</span> PNG をダウンロード
+</button>
+<button id="resetBtn" class="inline-flex items-center justify-center gap-2 px-6 py-4 border border-primary text-primary font-label-md text-label-md uppercase tracking-widest hover:bg-surface-container transition-colors duration-300 active:scale-95">
+別の画像
+</button>
+</div>
+</section>
+
+<!-- How it works -->
+<section class="mt-stack-lg grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">01 — Drop</p>
+<p class="font-body-md text-body-md text-on-surface-variant">画像をドロップ。初回はモデル（約44MB）の読み込みに少し時間がかかります。</p>
+</div>
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">02 — Auto cut</p>
+<p class="font-body-md text-body-md text-on-surface-variant">セグメンテーションモデルが被写体を検出し、背景を自動で透過します。</p>
+</div>
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">03 — Export</p>
+<p class="font-body-md text-body-md text-on-surface-variant">背景色（透過・白・黒・青）を選び、PNGとして書き出します。</p>
+</div>
+</section>
+
+<!-- Tech -->
+<section class="mt-stack-lg border-t border-surface-container pt-stack-md">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Tech</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">transformers.js · RMBG-1.4 (image segmentation) · WASM · 完全クライアントサイド処理</p>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-background border-t border-surface-container">
+<div class="flex flex-col md:flex-row justify-between items-center py-stack-md px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto gap-4">
+<div class="font-label-sm text-label-sm font-semibold text-primary">© 2026 HARUTO. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="https://github.com/torhada">GitHub</a>
+</div>
+</div>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

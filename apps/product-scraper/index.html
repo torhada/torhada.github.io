@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Product Scraper — 商品スクレイパー / HARUTO</title>
+<meta name="description" content="商品ページのURLを入れると、商品名・価格を抽出して表にし、CSVでダウンロードできるツール。" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    ::selection { background-color: #000000; color: #ffffff; }
+</style>
+<script src="../../assets/config.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-background border-b border-surface-container">
+<nav class="flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
+<a href="../../index.html" class="font-label-md text-label-md font-bold uppercase tracking-widest text-primary">HARUTO</a>
+<div class="flex gap-8">
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../index.html">Home</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../works.html">Works</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../about.html">About</a>
+</div>
+</nav>
+</header>
+
+<main class="pt-32 pb-stack-xl max-w-[1100px] mx-auto px-margin-mobile md:px-margin-desktop">
+
+<!-- Header -->
+<section class="mb-stack-md">
+<a href="../../works.html" class="font-label-sm text-label-sm text-outline hover:text-primary uppercase tracking-widest inline-flex items-center gap-1 mb-stack-sm">← Works</a>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surface-container pb-stack-sm">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase tracking-tight">Product Scraper</h1>
+<span class="font-label-md text-label-md text-outline mb-2">Web App · 商品スクレイパー</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[760px] mt-stack-md">
+商品ページのURLを貼り付けると、商品名と価格を抽出して一覧表にし、CSVでダウンロードできます。複数のURLをまとめて比較表にするのに便利です。
+</p>
+<p class="font-label-sm text-label-sm text-outline mt-stack-sm flex items-start gap-2">
+<span class="material-symbols-outlined text-base">info</span>
+<span>取得は Cloudflare Worker（サーバー側）が行います。ページ内の構造化データ（schema.org / OGP）から抽出するため、JavaScriptで描画するサイトやbotを弾くサイトは取得できない場合があります。対象サイトの利用規約・robots.txt に配慮してご利用ください。</span>
+</p>
+</section>
+
+<!-- Input -->
+<section class="space-y-stack-sm">
+<label for="urls" class="font-label-sm text-label-sm text-outline uppercase tracking-widest">商品ページURL（1行に1つ）</label>
+<textarea id="urls" rows="5" class="w-full border border-outline-variant rounded p-4 font-body-md text-body-md focus:border-primary focus:ring-0" placeholder="https://example.com/products/aaa&#10;https://example.com/products/bbb"></textarea>
+
+<div class="flex flex-col sm:flex-row gap-3">
+<button id="runBtn" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors duration-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">
+<span class="material-symbols-outlined text-lg">travel_explore</span> 抽出する
+</button>
+<button id="clearBtn" class="inline-flex items-center justify-center gap-2 px-6 py-4 border border-primary text-primary font-label-md text-label-md uppercase tracking-widest hover:bg-surface-container transition-colors duration-300 active:scale-95">
+クリア
+</button>
+</div>
+
+<p id="status" class="font-body-md text-body-md text-on-surface-variant min-h-[1.5em]"></p>
+</section>
+
+<!-- Results -->
+<section id="tableWrap" class="hidden mt-stack-sm">
+<div class="flex items-center justify-between mb-stack-sm">
+<h2 class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Result</h2>
+<button id="csvBtn" disabled class="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-primary text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+<span class="material-symbols-outlined text-base">download</span> CSV
+</button>
+</div>
+<div class="overflow-x-auto border border-surface-container">
+<table class="w-full border-collapse">
+<thead>
+<tr class="border-b border-primary text-left">
+<th class="py-2 px-4 font-label-sm text-label-sm text-outline uppercase tracking-widest">#</th>
+<th class="py-2 px-4 font-label-sm text-label-sm text-outline uppercase tracking-widest">商品名</th>
+<th class="py-2 px-4 font-label-sm text-label-sm text-outline uppercase tracking-widest">価格</th>
+<th class="py-2 px-4 font-label-sm text-label-sm text-outline uppercase tracking-widest">通貨</th>
+<th class="py-2 px-4 font-label-sm text-label-sm text-outline uppercase tracking-widest">元</th>
+</tr>
+</thead>
+<tbody id="tbody" class="px-4"></tbody>
+</table>
+</div>
+</section>
+
+<!-- How it works -->
+<section class="mt-stack-lg grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">01 — URL</p>
+<p class="font-body-md text-body-md text-on-surface-variant">商品ページのURLを貼る（複数可）。</p>
+</div>
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">02 — Extract</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Worker がページを取得し、構造化データから商品名・価格を抽出。</p>
+</div>
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">03 — CSV</p>
+<p class="font-body-md text-body-md text-on-surface-variant">表にまとまったら、CSVとして書き出し（Excel対応）。</p>
+</div>
+</section>
+
+<!-- Tech -->
+<section class="mt-stack-lg border-t border-surface-container pt-stack-md">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Tech</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Cloudflare Workers · HTMLRewriter · schema.org JSON-LD / OGP · 静的フロント (GitHub Pages)</p>
+<details class="mt-stack-sm">
+<summary class="font-label-sm text-label-sm text-outline uppercase tracking-widest cursor-pointer">詳細設定（Worker URL）</summary>
+<div class="mt-2 space-y-2">
+<p class="font-body-md text-body-md text-on-surface-variant">バックエンド Worker のURL。未設定だと動作しません。</p>
+<input id="apiInput" type="text" class="w-full border border-outline-variant rounded p-3 font-label-sm text-label-sm focus:border-primary focus:ring-0" />
+</div>
+</details>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-background border-t border-surface-container">
+<div class="flex flex-col md:flex-row justify-between items-center py-stack-md px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto gap-4">
+<div class="font-label-sm text-label-sm font-semibold text-primary">© 2026 HARUTO. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="https://github.com/torhada">GitHub</a>
+</div>
+</div>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Hand Scroll — Live Demo / HARUTO</title>
+<meta name="description" content="手をかざしてページをスクロールする Chrome 拡張『Hand Scroll』のブラウザ内ライブデモ。カメラ映像はすべて端末内で処理されます。" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    ::selection { background-color: #000000; color: #ffffff; }
+    /* Hide scrollbar on the demo panel for a cleaner look */
+    #demoScroll::-webkit-scrollbar { width: 6px; }
+    #demoScroll::-webkit-scrollbar-thumb { background: #cfc4c5; }
+</style>
+<script src="../../assets/config.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-background border-b border-surface-container">
+<nav class="flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
+<a href="../../index.html" class="font-label-md text-label-md font-bold uppercase tracking-widest text-primary">HARUTO</a>
+<div class="flex gap-8">
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../index.html">Home</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../works.html">Works</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-200" href="../../about.html">About</a>
+</div>
+</nav>
+</header>
+
+<main class="pt-32 pb-stack-xl max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop">
+
+<!-- Header -->
+<section class="mb-stack-md">
+<a href="../../works.html" class="font-label-sm text-label-sm text-outline hover:text-primary uppercase tracking-widest inline-flex items-center gap-1 mb-stack-sm">← Works</a>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surface-container pb-stack-sm">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase tracking-tight">Hand Scroll</h1>
+<span class="font-label-md text-label-md text-outline mb-2">Chrome Extension · Live Demo</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[760px] mt-stack-md">
+手のひらをカメラにかざして上下に動かすと、ページがスクロールします。料理中など手が離せないときの操作を想定した Chrome 拡張です。本来は拡張機能ですが、コア技術（MediaPipe による手の認識）は端末内で完結するため、この場でそのまま試せるようにしました。
+</p>
+<p class="font-label-sm text-label-sm text-outline mt-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-base">lock</span>
+カメラ映像は外部に送信されず、すべてあなたのブラウザ内で処理されます。
+</p>
+</section>
+
+<!-- Demo -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-gutter md:gap-margin-desktop items-start">
+
+<!-- Camera panel -->
+<div class="space-y-stack-sm">
+<div class="relative aspect-[4/3] bg-inverse-surface overflow-hidden border border-surface-container">
+<video id="cam" class="w-full h-full object-cover -scale-x-100" playsinline muted></video>
+<!-- Zone overlay -->
+<div id="zoneOverlay" class="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300">
+<div class="absolute left-0 right-0" style="top:42%"><div class="border-t border-dashed border-inverse-on-surface/50"></div></div>
+<div class="absolute left-0 right-0" style="top:58%"><div class="border-t border-dashed border-inverse-on-surface/50"></div></div>
+<div id="zoneUp" class="absolute left-0 right-0 top-0 flex items-start justify-center pt-2 transition-colors" style="height:42%">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-inverse-on-surface/60">▲ Up</span>
+</div>
+<div id="zoneDown" class="absolute left-0 right-0 bottom-0 flex items-end justify-center pb-2 transition-colors" style="height:42%">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-inverse-on-surface/60">▼ Down</span>
+</div>
+</div>
+<!-- Status badge -->
+<div id="badge" class="absolute top-3 left-3 px-3 py-1 bg-background/90 font-label-sm text-label-sm uppercase tracking-widest text-outline">Idle</div>
+</div>
+
+<!-- Controls -->
+<div class="flex flex-col sm:flex-row gap-3">
+<button id="startBtn" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors duration-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">
+<span class="material-symbols-outlined text-lg">videocam</span><span id="startLabel">カメラを起動</span>
+</button>
+<button id="stopBtn" class="inline-flex items-center justify-center gap-2 px-6 py-4 border border-primary text-primary font-label-md text-label-md uppercase tracking-widest hover:bg-surface-container transition-colors duration-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+停止
+</button>
+</div>
+
+<!-- Sensitivity -->
+<div class="border border-surface-container p-4 space-y-2">
+<label for="sens" class="font-label-sm text-label-sm text-outline uppercase tracking-widest flex justify-between"><span>Sensitivity / 感度</span><span id="sensVal">600</span></label>
+<input id="sens" type="range" min="200" max="1200" step="50" value="600" class="w-full accent-secondary" />
+</div>
+
+<p id="hint" class="font-body-md text-body-md text-on-surface-variant"></p>
+</div>
+
+<!-- Scroll target -->
+<div class="border border-surface-container">
+<div class="border-b border-surface-container px-4 py-3 flex items-center justify-between bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Demo Content — 手でスクロール</span>
+<span class="material-symbols-outlined text-lg text-outline">swipe_vertical</span>
+</div>
+<div id="demoScroll" class="h-[480px] overflow-y-auto px-stack-sm py-stack-sm space-y-stack-sm">
+<h2 class="font-headline-md text-headline-md">基本のパンケーキ</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">手が汚れていても、手をかざすだけでレシピを読み進められます。下のステップを、手のひらを上下に動かしてスクロールしてみてください。</p>
+<img src="https://picsum.photos/seed/pancake/640/360" alt="" class="w-full grayscale" />
+<h3 class="font-headline-md text-headline-md">材料（2人分）</h3>
+<ul class="font-body-md text-body-md list-disc pl-5 space-y-1">
+<li>薄力粉 … 150g</li><li>砂糖 … 大さじ2</li><li>ベーキングパウダー … 小さじ2</li>
+<li>牛乳 … 120ml</li><li>卵 … 1個</li><li>バター … 適量</li>
+</ul>
+<h3 class="font-headline-md text-headline-md">作り方</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">1. ボウルに薄力粉・砂糖・ベーキングパウダーを入れて混ぜる。</p>
+<p class="font-body-md text-body-md text-on-surface-variant">2. 別のボウルで卵を溶き、牛乳を加えて混ぜる。</p>
+<p class="font-body-md text-body-md text-on-surface-variant">3. 粉類に液体を加え、ダマが少し残る程度にさっくり混ぜる。</p>
+<img src="https://picsum.photos/seed/batter/640/360" alt="" class="w-full grayscale" />
+<p class="font-body-md text-body-md text-on-surface-variant">4. フライパンを弱めの中火で熱し、バターを薄くひく。</p>
+<p class="font-body-md text-body-md text-on-surface-variant">5. 生地を流し入れ、表面に気泡が出たら裏返す。</p>
+<p class="font-body-md text-body-md text-on-surface-variant">6. 両面がきつね色になったら完成。お好みでメープルシロップを。</p>
+<img src="https://picsum.photos/seed/serve/640/360" alt="" class="w-full grayscale" />
+<h3 class="font-headline-md text-headline-md">コツ</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">混ぜすぎないことがふんわり仕上げる秘訣です。生地を寝かせるとさらに口当たりがよくなります。</p>
+<p class="font-body-md text-body-md text-on-surface-variant">ここまで手だけでスクロールできましたか？ これが Hand Scroll の操作感です。</p>
+<div class="border-t border-surface-container pt-stack-sm">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">— End —</span>
+</div>
+</div>
+</div>
+
+</section>
+
+<!-- How it works -->
+<section class="mt-stack-lg grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">01 — 起動</p>
+<p class="font-body-md text-body-md text-on-surface-variant">「カメラを起動」を押し、ブラウザのカメラ許可を承認します。初回はモデル読み込みに数秒〜（約25MB）。</p>
+</div>
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">02 — 手をかざす</p>
+<p class="font-body-md text-body-md text-on-surface-variant">手のひらを開いてカメラに向けるとスクロールモードに。中央が停止ゾーンです。</p>
+</div>
+<div class="space-y-2">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">03 — 上下に動かす</p>
+<p class="font-body-md text-body-md text-on-surface-variant">手を上ゾーンへ動かすと上に、下ゾーンへ動かすと下にスクロール。端に近いほど速くなります。</p>
+</div>
+</section>
+
+<!-- Tech -->
+<section class="mt-stack-lg border-t border-surface-container pt-stack-md">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Tech</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">MediaPipe Gesture Recognizer (WASM) · Chrome Manifest V3 · Side Panel API</p>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-background border-t border-surface-container">
+<div class="flex flex-col md:flex-row justify-between items-center py-stack-md px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto gap-4">
+<div class="font-label-sm text-label-sm font-semibold text-primary">© 2026 HARUTO. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-outline hover:text-primary underline transition-all" href="https://github.com/torhada">GitHub</a>
+</div>
+</div>
+</footer>
+
+<script type="module">
+import { ScrollGestureController } from "./controller.js";
+
+const cam       = document.getElementById("cam");
+const startBtn  = document.getElementById("startBtn");
+const startLabel= document.getElementById("startLabel");
+const stopBtn   = document.getElementById("stopBtn");
+const badge     = document.getElementById("badge");
+const overlay   = document.getElementById("zoneOverlay");
+const zoneUp    = document.getElementById("zoneUp");
+const zoneDown  = document.getElementById("zoneDown");
+const demoScroll= document.getElementById("demoScroll");
+const sens      = document.getElementById("sens");
+const sensVal   = document.getElementById("sensVal");
+const hint      = document.getElementById("hint");
+
+const ACTIVE_BG = "rgba(33,74,226,0.35)"; // secondary @ 35%
+
+let controller = null;
+let stream     = null;
+
+function setBadge(text, active) {
+  badge.textContent = text;
+  badge.classList.toggle("text-secondary", !!active);
+  badge.classList.toggle("text-outline", !active);
+}
+
+function checkSecure() {
+  // getUserMedia requires a secure context (https or localhost).
+  if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+    hint.textContent = "⚠ このデモはカメラを使うため、https のページ（公開URL）で開いてください。ローカルファイル(file://)では動作しません。";
+    startBtn.disabled = true;
+    return false;
+  }
+  return true;
+}
+
+sens.addEventListener("input", () => {
+  sensVal.textContent = sens.value;
+  if (controller) controller.scrollMultiplier = Number(sens.value);
+});
+
+startBtn.addEventListener("click", async () => {
+  if (!checkSecure()) return;
+  startBtn.disabled = true;
+  startLabel.textContent = "モデル読み込み中…";
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+    cam.srcObject = stream;
+    await cam.play();
+
+    if (!controller) {
+      controller = new ScrollGestureController({ scrollMultiplier: Number(sens.value) });
+      controller.onScroll((amount) => { demoScroll.scrollBy(0, amount); });
+      controller.onStateChange((state, info) => {
+        if (state === "IDLE") {
+          setBadge("手をかざしてください", false);
+          zoneUp.style.background = "transparent";
+          zoneDown.style.background = "transparent";
+          return;
+        }
+        const z = info.zone;
+        setBadge(z === "up" ? "▲ 上スクロール" : z === "down" ? "▼ 下スクロール" : "● 停止ゾーン", true);
+        zoneUp.style.background   = z === "up"   ? ACTIVE_BG : "transparent";
+        zoneDown.style.background = z === "down" ? ACTIVE_BG : "transparent";
+      });
+      await controller.init();
+    }
+
+    controller.start(cam);
+    overlay.style.opacity = "1";
+    setBadge("手をかざしてください", false);
+    hint.textContent = "手のひらを開いてカメラに向け、上下に動かしてください。";
+    startLabel.textContent = "カメラを起動";
+    stopBtn.disabled = false;
+  } catch (err) {
+    console.error(err);
+    hint.textContent = "カメラを起動できませんでした：" + (err?.message || err) + "（許可を確認してください）";
+    startBtn.disabled = false;
+    startLabel.textContent = "カメラを起動";
+  }
+});
+
+stopBtn.addEventListener("click", () => {
+  if (controller) controller.stop();
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  cam.srcObject = null;
+  overlay.style.opacity = "0";
+  setBadge("Idle", false);
+  stopBtn.disabled = true;
+  startBtn.disabled = false;
+});
+
+checkSecure();
+</script>
+</body>
+</html>

@@ -12,10 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  // ----- GA4 イベント送信ヘルパー（未設定でもエラーにならない） -----
+  const track = (name, params = {}) => {
+    if (typeof gtag === "function") gtag("event", name, params);
+  };
+
   // ----- Calendly ポップアップ -----
   document.querySelectorAll("[data-calendly]").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
+      // 予約ボタンのクリックを計測（どのボタンが押されたかをlabelで記録）
+      track("reserve_click", { button_label: (btn.textContent || "").trim() });
       if (window.Calendly && CALENDLY_URL.indexOf("【") === -1) {
         window.Calendly.initPopupWidget({ url: CALENDLY_URL });
       } else {
@@ -113,6 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (res.ok) {
+          // 問い合わせ送信完了をコンバージョンとして計測
+          track("contact_submit", {
+            menu: form.querySelector('input[name="希望メニュー"]:checked')?.value || "未選択",
+          });
           form.hidden = true;
           thanks.hidden = false;
           thanks.scrollIntoView({ behavior: "smooth", block: "center" });
